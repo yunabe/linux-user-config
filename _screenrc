@@ -1,0 +1,8 @@
+escape ^z^z
+startup_message off
+hardstatus alwayslastline "%w"
+bind x
+bind ^x
+
+markkeys h=^b:l=^f:$=^e:^U=^U:^d=^v
+markkeys ' '=^@
