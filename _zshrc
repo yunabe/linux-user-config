@@ -1,0 +1,136 @@
+####################
+# Edited by yunabe #
+####################
+
+append_envvar() {
+  local sep
+  if [ -z $3 ] ; then
+    sep=':'
+  else
+    sep=$3
+  fi
+  local value=`eval echo '$'$1`
+  if [ -z $value ] ; then
+    export $1=$2
+  else
+    export $1=$value$sep$2
+  fi
+}
+
+append_path() {
+  if [ -e $1 ] ; then
+    append_envvar PATH $1
+  fi
+}
+
+append_path $HOME/local/bin
+
+# for MacPorts
+append_path /opt/local/bin
+append_path /opt/local/sbin/:$PATH
+append_envvar MANPATH /opt/local/man
+# end for MacPorts
+
+# Enable compsys completion.
+autoload -U compinit
+compinit
+
+setopt auto_pushd # cd -<TAB> complements previous directories.
+setopt auto_cd # directory names without commands are evaluated as cd <directory name>.
+setopt correct # spell correction
+unsetopt cdable_vars # This option is not appropriate in an environment with many users.
+                     # Default value of this option is off.
+setopt nobeep # no beep
+
+# History 
+HISTFILE=$HOME/.zsh.d/.zsh-history # If HISTFILE is empty, zsh save no history :(
+SAVEHIST=1000000 # The number of histories on file
+HISTSIZE=1000000 # The number of histories that I can search for.
+setopt share_history # share history among screens.
+# setopt inc_append_history # Don't I need this? c.f. http://unix.derkeiler.com/Newsgroups/comp.unix.shell/2003-04/0967.html
+setopt extended_history # Timestamps are saved in the history list. We can check timestamps by 'history -i'
+                        # If share_history is on, history save timestamps temporarily.
+                        # But, without extended_history, those temporary timestamps are deleted when zsh shut down.
+setopt hist_no_store # history (fc -l) command is excluded from history.
+setopt hist_ignore_dups # if a command is the same previous command, it will not be saved.
+setopt hist_ignore_space # Remove command lines from the history list when the first character on the line is a space.
+setopt hist_reduce_blanks # Whitespaces in command lines are removed from the history.
+
+setopt numeric_glob_sort # echo * show 1.txt 2.txt 10.txt (not 1.txt 10.txt 2.txt)
+setopt extendedglob # 1. Make ^ available outside of [].
+                    #    e.g.) echo ^*.c # Show files other than *.c
+                    # 2. Make pattern1~pattern2 available.
+                    #    e.g.) echo *.c~hello.c # Show c files other than hello.c
+
+bindkey -e # make sure zsh is in emacs mode altough emacs mode is default.
+
+setopt mark_dirs # Append a trailing / to all directory names resulting from filename generation (globbing)
+                 # e.g.) echo /hom* -> /home/
+                 # Is this option really convinient?
+                 # http://www.cs.elte.hu/zsh-manual/zsh_16.html
+setopt list_packed # Try to reduce rows of the completition. (It means columns are increased.)
+                   # http://zsh.sourceforge.net/Doc/Release/zsh_15.html
+setopt equals # command name prefixed by '=' is converted to path of the command.
+              # Default value of this option is on
+# Enable completion for file path after = (e.g., --prefix=/home)
+setopt magic_equal_subst
+
+setopt shortloops
+
+# Make completion lists colorful
+if [ `uname` = 'Linux' ]; then
+  eval `dircolors`
+elif [ `uname` = 'Darwin' ]; then
+  # gdircolors in coreutils
+  eval `gdircolors`
+fi
+export ZLS_COLORS=$LS_COLORS
+zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+# Mark a selected completion item.
+zstyle ':completion:*:default' menu select=1
+
+PROMPT='%m:%n%% '
+# Shows RHS colorful Google logo.
+RPROMPT="[%~] %B%{[34m%}G%{[31m%}o%{[33m%}o%{[34m%}g%{[32m%}l%{[31m%}e%{[m%}%b"
+
+# for git
+export GIT_EDITOR='emacs'
+
+# alias
+# alias ls='ls -F --color=tty'
+# alias l='ls -F --color=tty'
+alias rm='rm -i'
+alias mv='mv -i'
+alias cp='cp -i'
+alias indent='indent -kr -i4 -ts4'
+alias em='emacs -nw'
+alias py='python'
+alias ll='ls -lFa'
+alias m='make'
+alias mc='make clean'
+alias manc='man -P cat'
+alias gr='grep'
+alias sc='screen'
+alias ss='svn status | grep -v "^?"'
+alias jobs='jobs -l'
+alias -g  GR='| grep -i'
+alias -g  LV='| lv'
+
+# alias for file extensions
+alias -s cc=em
+alias -s h=em
+alias -s c=em
+
+#disable Ctrl-S lock
+stty stop undef
+
+# for Mac OS X
+if [ `uname` = 'Darwin' ] ; then
+  export CLICOLOR=1
+  export LSCOLORS=ExFxCxDxBxegedabagacad
+fi
+
+# Write settings should not be shared in ~/.zshrc_local
+if [ -e $HOME/.zshrc_local ] ; then
+  source $HOME/.zshrc_local
+fi
