@@ -130,6 +130,38 @@ if [ `uname` = 'Darwin' ] ; then
   export LSCOLORS=ExFxCxDxBxegedabagacad
 fi
 
+urlencode() {
+  if [ $# != 0 ]; then
+    python -c "import urllib;import sys;print urllib.quote(' '.join(sys.argv[1:]))" $@
+  else
+    python -c "import urllib;import sys;print urllib.quote(sys.stdin.read().rstrip())"
+  fi
+}
+
+urlencode_plus() {
+  if [ $# != 0 ]; then
+    python -c "import urllib;import sys;print urllib.quote_plus(' '.join(sys.argv[1:]))" $@
+  else
+    python -c "import urllib;import sys;print urllib.quote_plus(sys.stdin.read().rstrip())"
+  fi
+}
+
+urldecode() {
+  if [ $# != 0 ]; then
+    python -c "import urllib;import sys;print urllib.unquote(' '.join(sys.argv[1:]))" $@
+  else
+    python -c "import urllib;import sys;print urllib.unquote(sys.stdin.read().rstrip())"
+  fi
+}
+
+urldecode_plus() {
+  if [ $# != 0 ]; then
+    python -c "import urllib;import sys;print urllib.unquote_plus(' '.join(sys.argv[1:]))" $@
+  else
+    python -c "import urllib;import sys;print urllib.unquote_plus(sys.stdin.read().rstrip())"
+  fi
+}
+
 # Write settings should not be shared in ~/.zshrc_local
 if [ -e $HOME/.zshrc_local ] ; then
   source $HOME/.zshrc_local
