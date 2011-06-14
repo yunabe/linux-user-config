@@ -27,9 +27,10 @@ append_path $HOME/local/bin
 
 # for MacPorts
 append_path /opt/local/bin
-append_path /opt/local/sbin/:$PATH
-append_envvar MANPATH /opt/local/man
+append_path /opt/local/sbin
 # end for MacPorts
+
+append_path $HOME/local/android-sdk-mac_86/tools
 
 # Enable compsys completion.
 autoload -U compinit
