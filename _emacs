@@ -38,3 +38,36 @@
 ;; for Java
 (setq c-default-style
       '((java-mode . "gnu") ))
+
+(defun yunabe-string-match-all (string-format regexps name)
+(if (null regexps) t
+  (and (string-match (if string-format (car regexps)
+                       (regexp-quote (car regexps)))
+                     name)
+       (yunabe-string-match-all string-format (cdr regexps) name))))
+
+;; See the default implementation of this function in iswitchb.el
+(defun iswitchb-get-matched-buffers (regexp
+                                     &optional string-format buffer-list)
+  "Return buffers matching all space-separated regexes in regexp.
+If STRING-FORMAT is nil, consider REGEXP as just a string.
+BUFFER-LIST can be list of buffers or list of strings."
+  (let* ((case-fold-search  iswitchb-case)
+          ;; need reverse since we are building up list backwards
+          (list              (reverse buffer-list))
+         (do-string         (stringp (car list)))
+         (regexpes (split-string regexp))
+         name
+         ret)
+    (mapcar
+     (lambda (x)
+       (if do-string
+              (setq name x)               ;We already have the name
+          (setq name (buffer-name x)))
+       (cond
+        ((and (yunabe-string-match-all string-format regexpes name)
+              (not (iswitchb-ignore-buffername-p name)))
+          (setq ret (cons name ret))
+          )))
+     list)
+    ret))
