@@ -71,3 +71,8 @@ BUFFER-LIST can be list of buffers or list of strings."
           )))
      list)
     ret))
+
+;; cp $GOROOT/misc/emacs/go-mode-load.el ~/.emacs.d
+;; cp $GOROOT/misc/emacs/go-mode.el ~/.emacs.d
+(add-to-list 'load-path "~/.emacs.d" t)
+(require 'go-mode-load)
