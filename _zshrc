@@ -167,3 +167,5 @@ urldecode_plus() {
 if [ -e $HOME/.zshrc_local ] ; then
   source $HOME/.zshrc_local
 fi
+
+export GOROOT=$HOME/local/src/go
