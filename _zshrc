@@ -17,13 +17,35 @@ append_envvar() {
   fi
 }
 
+prepend_envvar() {
+  local sep
+  if [ -z $3 ] ; then
+    sep=':'
+  else
+    sep=$3
+  fi
+  local value=`eval echo '$'$1`
+  if [ -z $value ] ; then
+    export $1=$2
+  else
+    export $1=$2$sep$value
+  fi
+}
+
 append_path() {
   if [ -e $1 ] ; then
     append_envvar PATH $1
   fi
 }
 
-append_path $HOME/local/bin
+prepend_path() {
+  if [ -e $1 ] ; then
+    prepend_envvar PATH $1
+  fi
+}
+
+prepend_path $HOME/local/bin
+append_path $HOME/local/depot_tools
 
 # for MacPorts
 append_path /opt/local/bin
