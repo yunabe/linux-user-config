@@ -76,3 +76,23 @@ BUFFER-LIST can be list of buffers or list of strings."
 ;; cp $GOROOT/misc/emacs/go-mode.el ~/.emacs.d
 (add-to-list 'load-path "~/.emacs.d" t)
 (require 'go-mode-load)
+
+;; Change color when line width exceeds limits.
+(dolist (hook-info '((c-mode-hook . 80)
+(c++-mode-hook . 80)
+(java-mode-hook . 100)
+(objc-mode-hook . 80)
+(python-mode-hook . 80)
+(emacs-lisp-mode-hook . 80)))
+(add-hook (car hook-info)
+`(lambda ()
+(setq indent-tabs-mode nil)
+(font-lock-add-keywords
+nil
+'((,(format "^.\\{%d\\}\\(.+\\)" (cdr hook-info))
+1 font-lock-warning-face t)))
+)))
+
+;; scala
+(add-to-list 'load-path "~/local/src/scala-mode")
+(require 'scala-mode-auto)
