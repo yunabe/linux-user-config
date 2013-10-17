@@ -186,6 +186,10 @@ urldecode_plus() {
   fi
 }
 
+pygrep() {
+  python -c "import re;import sys;import os;lines = map(lambda l: l.rstrip('\r\n'), sys.stdin.readlines());lines = filter(lambda s:"$1",lines); lines and sys.stdout.write('\n'.join(lines) + '\n')"
+}
+
 # Write settings should not be shared in ~/.zshrc_local
 if [ -e $HOME/.zshrc_local ] ; then
   source $HOME/.zshrc_local
