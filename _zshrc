@@ -196,4 +196,8 @@ if [ -e $HOME/.zshrc_local ] ; then
   source $HOME/.zshrc_local
 fi
 
-export GOROOT=$HOME/local/src/go
+if [ -e $1 ] ; then
+  prepend_path $HOME/local/go1.4/bin
+  export GOROOT=$HOME/local/go1.4
+  export GOPATH=$HOME/local/gopath
+fi
