@@ -48,6 +48,7 @@ prepend_path $HOME/local/bin
 prepend_path $HOME/local/scala-2.9.1.final/bin
 append_path $HOME/local/depot_tools
 append_path $HOME/Library/Python/2.7/bin
+append_path $HOME/.gem/ruby/2.0.0/bin
 
 # for MacPorts
 append_path /opt/local/bin
