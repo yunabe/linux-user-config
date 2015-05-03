@@ -51,6 +51,7 @@ append_path $HOME/local/depot_tools
 append_path $HOME/Library/Python/2.7/bin
 append_path $HOME/.gem/ruby/2.0.0/bin
 append_path $HOME/local/google-cloud-sdk/bin
+append_path $HOME/local/apache-maven-3.3.3/bin
 
 # for MacPorts
 append_path /opt/local/bin
@@ -199,8 +200,7 @@ if [ -e $HOME/.zshrc_local ] ; then
   source $HOME/.zshrc_local
 fi
 
-if [ -e $1 ] ; then
-  prepend_path $HOME/local/go1.4/bin
-  export GOROOT=$HOME/local/go1.4
-  export GOPATH=$HOME/local/gopath
-fi
+# golang
+append_path $HOME/local/go/bin
+export GOROOT=$HOME/local/go
+export GOPATH=$HOME/local/gocode
