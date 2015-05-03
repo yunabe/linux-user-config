@@ -45,6 +45,7 @@ prepend_path() {
 }
 
 prepend_path $HOME/local/bin
+prepend_path $HOME/.local/bin
 prepend_path $HOME/local/scala-2.9.1.final/bin
 append_path $HOME/local/depot_tools
 append_path $HOME/Library/Python/2.7/bin
@@ -197,4 +198,8 @@ if [ -e $HOME/.zshrc_local ] ; then
   source $HOME/.zshrc_local
 fi
 
-export GOROOT=$HOME/local/src/go
+if [ -e $1 ] ; then
+  prepend_path $HOME/local/go1.4/bin
+  export GOROOT=$HOME/local/go1.4
+  export GOPATH=$HOME/local/gopath
+fi
