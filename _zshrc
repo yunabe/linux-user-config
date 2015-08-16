@@ -202,5 +202,4 @@ fi
 
 # golang
 append_path $HOME/local/go/bin
-export GOROOT=$HOME/local/go
 export GOPATH=$HOME/local/gocode
