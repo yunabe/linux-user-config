@@ -1,0 +1,7 @@
+[user]
+	name = Yu Watanabe
+	email = yunabe.public@gmail.com
+[color]
+	ui = auto
+[push]
+	default = simple
