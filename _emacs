@@ -10,6 +10,14 @@
 (require 'cask "~/.cask/cask.el")
 (cask-initialize)
 
+;; auto-complete
+(require 'go-autocomplete)
+(require 'auto-complete-config)
+(ac-config-default)
+
+;; gofmt
+(add-hook 'before-save-hook 'gofmt-before-save)
+
 ;; coding systems
 (set-default-coding-systems 'utf-8)
 (set-buffer-file-coding-system 'utf-8)
