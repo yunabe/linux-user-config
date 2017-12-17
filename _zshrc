@@ -46,7 +46,7 @@ prepend_path() {
 
 prepend_path $HOME/local/bin
 prepend_path $HOME/.local/bin
-prepend_path $HOME/local/scala-2.9.1.final/bin
+prepend_path $HOME/.cask/bin
 append_path $HOME/local/depot_tools
 append_path $HOME/Library/Python/2.7/bin
 append_path $HOME/.gem/ruby/2.0.0/bin
@@ -205,6 +205,8 @@ append_path $HOME/local/go/bin
 export GOPATH=$HOME/local/gocode
 append_path $GOPATH/bin
 export LGOPATH=$HOME/local/lgo
+
+prepend_path /usr/lib/go-1.9/bin
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f "$HOME/local/google-cloud-sdk/path.zsh.inc" ]; then source "$HOME/local/google-cloud-sdk/path.zsh.inc"; fi
