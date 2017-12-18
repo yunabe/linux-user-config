@@ -1,13 +1,15 @@
-#Linux User Configuration
-#Set up
+# Linux User Configuration
+## Set up
+```shell
+cd
+# Read-Only
+git clone http://github.com/yunabe/linux-user-config.git config
+# Writable if possible
+git clone git@github.com:yunabe/linux-user-config.git config
+./config/setup.sh
+````
 
-    cd
-    # Read-Only
-    git clone http://github.com/yunabe/linux-user-config.git config
-    # Writable if possible
-    git clone git@github.com:yunabe/linux-user-config.git config
-    ./config/setup.sh
-
-#Sync
-
-    git pull
+## Sync
+```shell
+git pull
+```
