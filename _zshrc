@@ -122,8 +122,9 @@ PROMPT='%m:%n%% '
 # Shows RHS colorful Google logo.
 RPROMPT="[%~] %B%{[34m%}G%{[31m%}o%{[33m%}o%{[34m%}g%{[32m%}l%{[31m%}e%{[m%}%b"
 
-# for git
-export GIT_EDITOR='emacs'
+# Use emacs in git, etc..
+export EDITOR=emacs
+export GIT_EDITOR=emacs
 
 # alias
 # alias ls='ls -F --color=tty'
