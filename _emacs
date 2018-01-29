@@ -6,6 +6,9 @@
 ;; You may delete these explanatory comments.
 (package-initialize)
 
+;; 'cl is required by protobuf-mode.
+(require 'cl)
+
 ;; Cask
 (require 'cask "~/.cask/cask.el")
 (cask-initialize)
@@ -15,8 +18,14 @@
 (require 'auto-complete-config)
 (ac-config-default)
 
-;; gofmt
-(add-hook 'before-save-hook 'gofmt-before-save)
+;; Go mode configs
+(add-hook 'go-mode-hook
+          (lambda()
+            (add-hook 'before-save-hook' 'gofmt-before-save)
+            (local-set-key (kbd "M-.") 'godef-jump)))
+
+;; JavaScript
+(setq js-indent-level 2)
 
 ;; coding systems
 (set-default-coding-systems 'utf-8)

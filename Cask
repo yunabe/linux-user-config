@@ -5,3 +5,4 @@
 (depends-on "go-autocomplete")
 (depends-on "go-mode")
 (depends-on "yaml-mode")
+(depends-on "protobuf-mode")
