@@ -6,3 +6,4 @@
 (depends-on "go-mode")
 (depends-on "yaml-mode")
 (depends-on "protobuf-mode")
+(depends-on "typescript-mode")

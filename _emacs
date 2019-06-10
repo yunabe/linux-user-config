@@ -26,6 +26,7 @@
 
 ;; JavaScript
 (setq js-indent-level 2)
+(setq typescript-indent-level 2)
 
 ;; coding systems
 (set-default-coding-systems 'utf-8)
