@@ -7,3 +7,10 @@
 	default = simple
 [merge]
 	conflictstyle = diff3
+
+# https://git-scm.com/book/en/v2/Git-Basics-Git-Aliases
+[alias]
+	br = branch -vv
+	co = checkout
+	ci = commit
+	st = status
