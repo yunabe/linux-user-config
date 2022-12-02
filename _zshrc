@@ -50,17 +50,10 @@ prepend_path $HOME/.cask/bin
 append_path $HOME/local/depot_tools
 append_path $HOME/.npm-global/bin
 append_path $HOME/.gem/ruby/2.5.0/bin
-append_path $HOME/Library/Python/2.7/bin
+append_path $HOME/Library/Python/3.9/bin
 append_path $HOME/.gem/ruby/2.0.0/bin
 append_path $HOME/local/google-cloud-sdk/bin
 append_path $HOME/local/apache-maven-3.3.3/bin
-
-# for MacPorts
-append_path /opt/local/bin
-append_path /opt/local/sbin
-# end for MacPorts
-
-append_path $HOME/local/android-sdk-mac_86/tools
 
 # Enable compsys completion.
 autoload -U compinit
