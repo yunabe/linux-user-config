@@ -3,57 +3,73 @@
 ####################
 
 append_envvar() {
-  local sep
-  if [ -z $3 ] ; then
-    sep=':'
-  else
-    sep=$3
+  local var_name="$1"
+  local entry="$2"
+  local sep="${3:-:}"
+  local value="${(P)var_name}"
+  # Initialize the variable when it is currently empty.
+  if [ -z "$value" ] ; then
+    typeset -gx "$var_name=$entry"
+    return
   fi
-  local value=`eval echo '$'$1`
-  if [ -z $value ] ; then
-    export $1=$2
-  else
-    export $1=$value$sep$2
+  # Skip if the entry already exists (checked with separator boundaries).
+  if [[ "$sep$value$sep" == *"$sep$entry$sep"* ]]; then
+    return
   fi
+  typeset -gx "$var_name=$value$sep$entry"
 }
 
 prepend_envvar() {
-  local sep
-  if [ -z $3 ] ; then
-    sep=':'
-  else
-    sep=$3
+  local var_name="$1"
+  local entry="$2"
+  local sep="${3:-:}"
+  local value="${(P)var_name}"
+  # Initialize the variable when it is currently empty.
+  if [ -z "$value" ] ; then
+    typeset -gx "$var_name=$entry"
+    return
   fi
-  local value=`eval echo '$'$1`
-  if [ -z $value ] ; then
-    export $1=$2
-  else
-    export $1=$2$sep$value
+  # Skip if the entry already exists (checked with separator boundaries).
+  if [[ "$sep$value$sep" == *"$sep$entry$sep"* ]]; then
+    return
   fi
+  typeset -gx "$var_name=$entry$sep$value"
 }
 
+# PATH helper rule:
+# - prepend_path: higher priority (searched earlier). Use when command precedence must change.
+# - append_path: lower priority (searched later). Use for optional/fallback tool locations.
 append_path() {
-  if [ -e $1 ] ; then
-    append_envvar PATH $1
+  if [ -e "$1" ] ; then
+    append_envvar PATH "$1"
   fi
 }
 
 prepend_path() {
-  if [ -e $1 ] ; then
-    prepend_envvar PATH $1
+  if [ -e "$1" ] ; then
+    prepend_envvar PATH "$1"
   fi
 }
 
+# Keep manual PATH edits in one place for easy review.
+# - prepend_path: higher priority
+# - append_path: lower priority
 prepend_path $HOME/local/bin
 prepend_path $HOME/.local/bin
 prepend_path $HOME/.cask/bin
+
 append_path $HOME/local/depot_tools
-append_path $HOME/.npm-global/bin
 append_path $HOME/.gem/ruby/2.5.0/bin
 append_path $HOME/.gem/ruby/2.0.0/bin
 append_path $HOME/local/google-cloud-sdk/bin
 append_path $HOME/local/apache-maven-3.3.3/bin
+append_path $HOME/local/go/bin
+append_path $HOME/local/gocode/bin
+append_path $HOME/.antigravity/antigravity/bin
+
 prepend_path /opt/homebrew/opt/openjdk/bin
+prepend_path /usr/lib/go-1.9/bin
+prepend_path $HOME/.npm-global/bin
 
 # Enable compsys completion.
 autoload -U compinit
@@ -102,11 +118,12 @@ setopt magic_equal_subst
 setopt shortloops
 
 # Make completion lists colorful
-if [ `uname` = 'Linux' ]; then
-  eval `dircolors`
-elif [ `uname` = 'Darwin' ]; then
+OS_NAME="$(uname)"
+if [ "$OS_NAME" = 'Linux' ]; then
+  eval "$(dircolors)"
+elif [ "$OS_NAME" = 'Darwin' ]; then
   # gdircolors in coreutils
-  eval `gdircolors`
+  eval "$(gdircolors)"
 fi
 export ZLS_COLORS=$LS_COLORS
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
@@ -150,7 +167,7 @@ alias -s c=em
 stty stop undef
 
 # for Mac OS X
-if [ `uname` = 'Darwin' ] ; then
+if [ "$OS_NAME" = 'Darwin' ] ; then
   export CLICOLOR=1
   export LSCOLORS=ExFxCxDxBxegedabagacad
 fi
@@ -192,22 +209,17 @@ pygrep() {
 }
 
 # Write settings should not be shared in ~/.zshrc_local
-if [ -e $HOME/.zshrc_local ] ; then
-  source $HOME/.zshrc_local
+if [ -e "$HOME/.zshrc_local" ] ; then
+  source "$HOME/.zshrc_local"
 fi
 
 # golang
-append_path $HOME/local/go/bin
 export GOPATH=$HOME/local/gocode
-append_path $GOPATH/bin
 export LGOPATH=$HOME/local/lgo
-
-prepend_path /usr/lib/go-1.9/bin
 
 # NodeJS
 # cf.
 # https://docs.npmjs.com/getting-started/fixing-npm-permissions#option-two-change-npms-default-directory
-prepend_path $HOME/.npm-global/bin
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f "$HOME/local/google-cloud-sdk/path.zsh.inc" ]; then source "$HOME/local/google-cloud-sdk/path.zsh.inc"; fi
@@ -216,4 +228,4 @@ if [ -f "$HOME/local/google-cloud-sdk/path.zsh.inc" ]; then source "$HOME/local/
 if [ -f "$HOME/local/google-cloud-sdk/completion.zsh.inc" ]; then source "$HOME/local/google-cloud-sdk/completion.zsh.inc"; fi
 
 # Added by Antigravity
-append_path $HOME/.antigravity/antigravity/bin
+# PATH entry is managed in the grouped PATH section above.
