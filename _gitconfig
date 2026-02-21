@@ -14,3 +14,11 @@
 	co = checkout
 	ci = commit
 	st = status
+
+# Added by `git lfs install --global`.
+# This config enables automatic pointer<->content conversion for files tracked by Git LFS.
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
