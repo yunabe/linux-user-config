@@ -59,27 +59,33 @@ prepend_path $HOME/.local/bin
 prepend_path $HOME/.cask/bin
 
 append_path $HOME/local/depot_tools
-append_path $HOME/.gem/ruby/2.5.0/bin
-append_path $HOME/.gem/ruby/2.0.0/bin
+# RubyGems user bin for any installed Ruby version.
+# (NnOn): N=no match -> skip, n=numeric sort, On=reverse name sort => newer versions first.
+for ruby_gem_bin in "$HOME"/.gem/ruby/*/bin(NnOn); do
+  append_path "$ruby_gem_bin"
+done
 append_path $HOME/local/google-cloud-sdk/bin
-append_path $HOME/local/apache-maven-3.3.3/bin
+# Maven installs are versioned under ~/local (e.g., apache-maven-3.x.y).
+# (NnOn): N=no match -> skip, n=numeric sort, On=reverse name sort => newer versions first.
+for maven_bin in "$HOME"/local/apache-maven-*/bin(NnOn); do
+  append_path "$maven_bin"
+done
 append_path $HOME/local/go/bin
 append_path $HOME/local/gocode/bin
 append_path $HOME/.antigravity/antigravity/bin
 
 prepend_path /opt/homebrew/opt/openjdk/bin
-prepend_path /usr/lib/go-1.9/bin
+prepend_path /usr/lib/go/bin
+prepend_path /usr/local/go/bin
 prepend_path $HOME/.npm-global/bin
 
 # Enable compsys completion.
 autoload -U compinit
 compinit
 
-setopt auto_pushd # cd -<TAB> complements previous directories.
+setopt auto_pushd # Make cd push the old directory onto the directory stack.
 setopt auto_cd # directory names without commands are evaluated as cd <directory name>.
 setopt correct # spell correction
-unsetopt cdable_vars # This option is not appropriate in an environment with many users.
-                     # Default value of this option is off.
 setopt nobeep # no beep
 
 # History 
@@ -92,6 +98,9 @@ setopt extended_history # Timestamps are saved in the history list. We can check
                         # But, without extended_history, those temporary timestamps are deleted when zsh shut down.
 setopt hist_no_store # history (fc -l) command is excluded from history.
 setopt hist_ignore_dups # if a command is the same previous command, it will not be saved.
+setopt hist_ignore_all_dups # remove older duplicate entries when adding a new command.
+setopt hist_save_no_dups # omit older duplicates when writing $HISTFILE.
+setopt hist_fcntl_lock # use fcntl-based locking for safer concurrent history writes.
 setopt hist_ignore_space # Remove command lines from the history list when the first character on the line is a space.
 setopt hist_reduce_blanks # Whitespaces in command lines are removed from the history.
 
@@ -105,13 +114,9 @@ bindkey -e # make sure zsh is in emacs mode altough emacs mode is default.
 
 setopt mark_dirs # Append a trailing / to all directory names resulting from filename generation (globbing)
                  # e.g.) echo /hom* -> /home/
-setopt list_packed # Try to reduce rows of the completition. (It means columns are increased.)
-setopt equals # command name prefixed by '=' is converted to path of the command.
-              # Default value of this option is on
-# Enable completion for file path after = (e.g., --prefix=/home)
+setopt list_packed # Try to reduce rows of completion lists (with wider columns).
+# Enable filename expansion in args like --prefix=~/path after command names.
 setopt magic_equal_subst
-
-setopt shortloops
 
 # Make completion lists colorful
 OS_NAME="$(uname)"
