@@ -130,9 +130,18 @@ zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 # Mark a selected completion item.
 zstyle ':completion:*:default' menu select=1
 
-PROMPT='%m:%n%% '
-# Shows RHS colorful Google logo.
-RPROMPT="[%~] %B%{[34m%}G%{[31m%}o%{[33m%}o%{[34m%}g%{[32m%}l%{[31m%}e%{[m%}%b"
+# Prompt policy:
+# - yunabe on macOS (local): show only cwd.
+# - yunabe on Linux (often remote): include hostname.
+# - other users: include user and hostname.
+if [ "$USER" = "yunabe" ] && [ "$OS_NAME" = "Darwin" ]; then
+  PROMPT='[%~] %# '
+elif [ "$USER" = "yunabe" ]; then
+  PROMPT='[%~] %m %# '
+else
+  PROMPT='[%~] %n@%m %# '
+fi
+RPROMPT=''
 
 # Use emacs in git, etc..
 export EDITOR=emacs
