@@ -5,29 +5,26 @@
 This repository is stable but old. Some settings may be outdated, unused, or added temporarily and never revisited.
 This file is a working context for future maintenance (human or AI agent).
 
-## Snapshot (as of 2026-02-21)
+## Snapshot (as of 2026-02-22)
 
 - Repo type: personal dotfiles
 - First commit: 2010-10-31
-- Recent commits:
-  - 2026-02-21: document Git LFS config in `_gitconfig`
-  - 2026-02-21: adjust PATH entries in `_zshrc`
-- Main risk: stale PATH/tool references causing confusion or accidental priority issues
+- Current focus: modernizing long-lived shell config safely with small diffs.
+- Main risk: remaining legacy helpers/aliases may not match current tool availability
 
 ## Known cleanup themes
 
 1. PATH hygiene (`_zshrc`)
-- Validate each PATH entry is still needed.
-- Prefer helper functions (`append_path`/`prepend_path`) over raw `export PATH=...`.
-- Keep priority changes (`prepend_path`) only when intentional.
+- Keep path handling predictable and documented.
+- Continue validating whether each path is still useful across machines.
 
 2. Legacy language/tool assumptions
-- Old Ruby/Python path entries may no longer match currently used versions.
-- Emacs package assumptions in `Cask` may have drifted from current workflow.
+- Some helper functions and aliases still reflect older workflows.
+- Verify Python/CLI assumptions periodically against current local environments.
 
 3. Comment quality
-- Non-obvious bootstrap lines should explain origin and purpose.
-- Good example: Git LFS section in `_gitconfig` now documents that it comes from `git lfs install --global`.
+- Keep comments concise and aligned with actual behavior.
+- Correct comments when behavior changes (especially around shell options and glob qualifiers).
 
 ## Suggested maintenance workflow
 
@@ -39,9 +36,9 @@ This file is a working context for future maintenance (human or AI agent).
 
 ## Open questions
 
-- Which toolchains are truly active now (Go, Flutter, Maven, gcloud, etc.)?
+- Which aliases/helpers in `_zshrc` are still used weekly vs. purely historical?
+- Should command-spell correction (`correct`) stay disabled long-term?
 - Is `_emacs` still actively used, or mostly historical?
-- Should this repo stay as one profile or split by machine/OS role?
 
 ## Optional next artifacts
 

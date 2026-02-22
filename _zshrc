@@ -85,7 +85,8 @@ compinit
 
 setopt auto_pushd # Make cd push the old directory onto the directory stack.
 setopt auto_cd # directory names without commands are evaluated as cd <directory name>.
-setopt correct # spell correction
+# correct is off by default, but we explicitly keep it off even if global zshrc enables it.
+unsetopt correct
 setopt nobeep # no beep
 
 # History 
@@ -156,7 +157,7 @@ alias mv='mv -i'
 alias cp='cp -i'
 alias indent='indent -kr -i4 -ts4'
 alias em='emacs -nw'
-alias py='python'
+alias py='python3'
 alias ll='ls -lFa'
 alias m='make'
 alias mc='make clean'
@@ -173,8 +174,10 @@ alias -s cc=em
 alias -s h=em
 alias -s c=em
 
-#disable Ctrl-S lock
-stty stop undef
+# disable Ctrl-S lock on interactive terminals
+if [[ -t 0 ]]; then
+  stty stop undef
+fi
 
 # macOS ls colors
 if [ "$OS_NAME" = 'Darwin' ] ; then
@@ -183,39 +186,44 @@ if [ "$OS_NAME" = 'Darwin' ] ; then
 fi
 
 urlencode() {
-  if [ $# != 0 ]; then
-    python -c "import urllib;import sys;print urllib.quote(' '.join(sys.argv[1:]))" $@
+  if [ "$#" -ne 0 ]; then
+    python3 -c "import urllib.parse,sys;print(urllib.parse.quote(' '.join(sys.argv[1:])))" "$@"
   else
-    python -c "import urllib;import sys;print urllib.quote(sys.stdin.read().rstrip())"
+    python3 -c "import urllib.parse,sys;print(urllib.parse.quote(sys.stdin.read().rstrip()))"
   fi
 }
 
 urlencode_plus() {
-  if [ $# != 0 ]; then
-    python -c "import urllib;import sys;print urllib.quote_plus(' '.join(sys.argv[1:]))" $@
+  if [ "$#" -ne 0 ]; then
+    python3 -c "import urllib.parse,sys;print(urllib.parse.quote_plus(' '.join(sys.argv[1:])))" "$@"
   else
-    python -c "import urllib;import sys;print urllib.quote_plus(sys.stdin.read().rstrip())"
+    python3 -c "import urllib.parse,sys;print(urllib.parse.quote_plus(sys.stdin.read().rstrip()))"
   fi
 }
 
 urldecode() {
-  if [ $# != 0 ]; then
-    python -c "import urllib;import sys;print urllib.unquote(' '.join(sys.argv[1:]))" $@
+  if [ "$#" -ne 0 ]; then
+    python3 -c "import urllib.parse,sys;print(urllib.parse.unquote(' '.join(sys.argv[1:])))" "$@"
   else
-    python -c "import urllib;import sys;print urllib.unquote(sys.stdin.read().rstrip())"
+    python3 -c "import urllib.parse,sys;print(urllib.parse.unquote(sys.stdin.read().rstrip()))"
   fi
 }
 
 urldecode_plus() {
-  if [ $# != 0 ]; then
-    python -c "import urllib;import sys;print urllib.unquote_plus(' '.join(sys.argv[1:]))" $@
+  if [ "$#" -ne 0 ]; then
+    python3 -c "import urllib.parse,sys;print(urllib.parse.unquote_plus(' '.join(sys.argv[1:])))" "$@"
   else
-    python -c "import urllib;import sys;print urllib.unquote_plus(sys.stdin.read().rstrip())"
+    python3 -c "import urllib.parse,sys;print(urllib.parse.unquote_plus(sys.stdin.read().rstrip()))"
   fi
 }
 
 pygrep() {
-  python -c "import re;import sys;import os;lines = map(lambda l: l.rstrip('\r\n'), sys.stdin.readlines());lines = filter(lambda s:"$1",lines); lines and sys.stdout.write('\n'.join(lines) + '\n')"
+  if [ "$#" -ne 1 ]; then
+    echo "usage: pygrep <regex>" >&2
+    return 2
+  fi
+  python3 -c "import re,sys;pattern=re.compile(sys.argv[1]);\
+[print(line.rstrip('\\r\\n')) for line in sys.stdin if pattern.search(line)]" "$1"
 }
 
 # Write settings should not be shared in ~/.zshrc_local

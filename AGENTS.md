@@ -18,6 +18,8 @@ If there is any conflict, follow explicit user instructions in the current chat.
 - Keep comments for non-obvious config lines (especially PATH/tool bootstrap lines).
 - Do not remove settings unless there is a clear reason or user approval.
 - When unsure whether a path/tool is still used, verify before editing.
+- For config changes, run relevant syntax checks and a small runtime smoke test when behavior changes.
+- Before committing after long edit sessions, check both `git diff` and `git diff --cached`.
 
 ## Commit guidance
 
