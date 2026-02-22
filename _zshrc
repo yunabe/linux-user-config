@@ -87,7 +87,6 @@ HISTFILE=$HOME/.zsh.d/.zsh-history # If HISTFILE is empty, zsh save no history :
 SAVEHIST=1000000 # The number of histories on file
 HISTSIZE=1000000 # The number of histories that I can search for.
 setopt share_history # share history among screens.
-# setopt inc_append_history # Don't I need this? c.f. http://unix.derkeiler.com/Newsgroups/comp.unix.shell/2003-04/0967.html
 setopt extended_history # Timestamps are saved in the history list. We can check timestamps by 'history -i'
                         # If share_history is on, history save timestamps temporarily.
                         # But, without extended_history, those temporary timestamps are deleted when zsh shut down.
@@ -106,10 +105,7 @@ bindkey -e # make sure zsh is in emacs mode altough emacs mode is default.
 
 setopt mark_dirs # Append a trailing / to all directory names resulting from filename generation (globbing)
                  # e.g.) echo /hom* -> /home/
-                 # Is this option really convinient?
-                 # http://www.cs.elte.hu/zsh-manual/zsh_16.html
 setopt list_packed # Try to reduce rows of the completition. (It means columns are increased.)
-                   # http://zsh.sourceforge.net/Doc/Release/zsh_15.html
 setopt equals # command name prefixed by '=' is converted to path of the command.
               # Default value of this option is on
 # Enable completion for file path after = (e.g., --prefix=/home)
@@ -119,14 +115,16 @@ setopt shortloops
 
 # Make completion lists colorful
 OS_NAME="$(uname)"
-if [ "$OS_NAME" = 'Linux' ]; then
-  eval "$(dircolors)"
-elif [ "$OS_NAME" = 'Darwin' ]; then
-  # gdircolors in coreutils
+if command -v gdircolors >/dev/null 2>&1; then
+  # macOS/Homebrew coreutils provides GNU dircolors as gdircolors.
   eval "$(gdircolors)"
+elif command -v dircolors >/dev/null 2>&1; then
+  eval "$(dircolors)"
 fi
-export ZLS_COLORS=$LS_COLORS
-zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+if [ -n "$LS_COLORS" ]; then
+  export ZLS_COLORS="$LS_COLORS"
+  zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+fi
 # Mark a selected completion item.
 zstyle ':completion:*:default' menu select=1
 
@@ -148,8 +146,6 @@ export EDITOR=emacs
 export GIT_EDITOR=emacs
 
 # alias
-# alias ls='ls -F --color=tty'
-# alias l='ls -F --color=tty'
 alias rm='rm -i'
 alias mv='mv -i'
 alias cp='cp -i'
@@ -175,7 +171,7 @@ alias -s c=em
 #disable Ctrl-S lock
 stty stop undef
 
-# for Mac OS X
+# macOS ls colors
 if [ "$OS_NAME" = 'Darwin' ] ; then
   export CLICOLOR=1
   export LSCOLORS=ExFxCxDxBxegedabagacad
@@ -226,15 +222,8 @@ fi
 export GOPATH=$HOME/local/gocode
 export LGOPATH=$HOME/local/lgo
 
-# NodeJS
-# cf.
-# https://docs.npmjs.com/getting-started/fixing-npm-permissions#option-two-change-npms-default-directory
-
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f "$HOME/local/google-cloud-sdk/path.zsh.inc" ]; then source "$HOME/local/google-cloud-sdk/path.zsh.inc"; fi
 
 # The next line enables shell command completion for gcloud.
 if [ -f "$HOME/local/google-cloud-sdk/completion.zsh.inc" ]; then source "$HOME/local/google-cloud-sdk/completion.zsh.inc"; fi
-
-# Added by Antigravity
-# PATH entry is managed in the grouped PATH section above.
