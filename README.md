@@ -6,7 +6,7 @@ It is intentionally simple: keep source files in this repo and symlink them into
 ## What this repo is
 
 - Purpose: single source of truth for shell/editor/git tool settings.
-- Scope: mostly terminal-oriented developer setup (`zsh`, `git`, `emacs`, `screen`, `npm`, `hg`).
+- Scope: mostly terminal-oriented developer setup (`zsh`, `git`, `emacs`, `screen`, `tmux`, `npm`, `hg`).
 - Non-goal: this is not a generic framework for all machines; it reflects my personal workflow.
 
 ## Historical context
@@ -24,7 +24,7 @@ The current maintenance challenge is expected: long-lived dotfiles accumulate st
 - `_zshrc`: shell behavior, PATH, aliases, environment variables
 - `_gitconfig`: git defaults, aliases, merge style, optional integrations (e.g. LFS)
 - `_emacs` and `Cask`: editor config and packages
-- `_screenrc`, `_hgrc`, `_npmrc`: tool-specific defaults
+- `_screenrc`, `_tmux.conf`, `_hgrc`, `_npmrc`: tool-specific defaults
 - `setup.sh`: installs symlinks from this repo into `$HOME`
 
 ## Related docs

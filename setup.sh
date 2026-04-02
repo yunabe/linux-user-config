@@ -1,5 +1,6 @@
 cd $HOME
 ln -s config/_screenrc .screenrc
+ln -s config/_tmux.conf .tmux.conf
 mkdir .zsh.d
 ln -s config/_zshrc .zshrc
 ln -s config/_emacs .emacs
